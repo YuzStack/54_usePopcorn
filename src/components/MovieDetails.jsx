@@ -4,10 +4,24 @@ import Loader from './Loader';
 import ErrorMessage from './ErrorMessage';
 import StarRating from './StarRating';
 
-function MovieDetails({ selectedMovieID, onCloseMovie }) {
+function MovieDetails({
+  selectedMovieID,
+  onCloseMovie,
+  onAddWatchedMovie,
+  watchedMovies,
+}) {
   const [movie, setMovie] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
+  const [userRating, setUserRating] = useState(0);
+
+  const isWatched = watchedMovies.some(
+    movie => movie.imdbID === selectedMovieID,
+  );
+
+  const watchedMovieUserRating = watchedMovies.find(
+    movie => movie.imdbID === selectedMovieID,
+  )?.userRating;
 
   const {
     Title: title,
@@ -28,7 +42,7 @@ function MovieDetails({ selectedMovieID, onCloseMovie }) {
         try {
           setIsLoading(true);
           setError('');
-          
+
           const response = await fetch(
             `${BASE_URL}?apikey=${API_KEY}&i=${selectedMovieID}`,
           );
@@ -53,6 +67,21 @@ function MovieDetails({ selectedMovieID, onCloseMovie }) {
     },
     [selectedMovieID],
   );
+
+  const handleAddMovie = function () {
+    const newWatchedMovieObj = {
+      imdbID: selectedMovieID,
+      title,
+      year,
+      poster,
+      runtime: Number(runtime.split(' ').at(0)),
+      imdbRating: Number(imdbRating),
+      userRating,
+    };
+
+    onAddWatchedMovie(newWatchedMovieObj);
+    onCloseMovie();
+  };
 
   return (
     <div className='details'>
@@ -79,8 +108,24 @@ function MovieDetails({ selectedMovieID, onCloseMovie }) {
 
           <section>
             <div className='rating'>
-              <StarRating maxRating={10} size={24} />
+              {isWatched ? (
+                <p>You rated this movie {watchedMovieUserRating} ⭐️</p>
+              ) : (
+                <>
+                  <StarRating
+                    maxRating={10}
+                    size={24}
+                    onSetRating={setUserRating}
+                  />
+                  {userRating > 0 && (
+                    <button onClick={handleAddMovie} className='btn-add'>
+                      + Add to list
+                    </button>
+                  )}
+                </>
+              )}
             </div>
+
             <p>
               <em>{plot}</em>
             </p>

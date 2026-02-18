@@ -4,6 +4,7 @@ function WatchedSummary({ watched }) {
 
   // A more readable version that also works but less efficient in some edge cases
   // const average = arr => arr.reduce((acc, cur) => acc + cur, 0) / arr.length;
+
   const avgImdbRating = average(watched.map(movie => movie.imdbRating));
   const avgUserRating = average(watched.map(movie => movie.userRating));
   const avgRuntime = average(watched.map(movie => movie.runtime));
@@ -18,15 +19,15 @@ function WatchedSummary({ watched }) {
         </p>
         <p>
           <span>⭐️</span>
-          <span>{avgImdbRating}</span>
+          <span>{avgImdbRating.toFixed(2)}</span>
         </p>
         <p>
           <span>🌟</span>
-          <span>{avgUserRating}</span>
+          <span>{avgUserRating.toFixed(2)}</span>
         </p>
         <p>
           <span>⏳</span>
-          <span>{avgRuntime} min</span>
+          <span>{Math.ceil(avgRuntime)} min</span>
         </p>
       </div>
     </div>

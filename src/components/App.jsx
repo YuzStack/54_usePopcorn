@@ -69,6 +69,15 @@ function App() {
     setSelectedMovieID(null);
   };
 
+  const handleAddWatchedMovie = function (movieObj) {
+    // const movieIsAlreadyAdded = watched?.some(
+    //   movie => movie.imdbID === movieObj.imdbID,
+    // );
+    // if (movieIsAlreadyAdded) return;
+
+    setWatched(curWatched => [...curWatched, movieObj]);
+  };
+
   return (
     <>
       <Nav>
@@ -93,6 +102,8 @@ function App() {
             <MovieDetails
               selectedMovieID={selectedMovieID}
               onCloseMovie={handleCloseMovie}
+              onAddWatchedMovie={handleAddWatchedMovie}
+              watchedMovies={watched}
             />
           ) : (
             <>
