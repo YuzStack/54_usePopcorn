@@ -1,6 +1,6 @@
 function WatchedSummary({ watched }) {
   const average = arr =>
-    arr.reduce((acc, cur, i, arr) => acc + cur / arr.length, 0);
+    arr.reduce((acc, cur, _, arr) => acc + cur / arr.length, 0);
 
   // A more readable version that also works but less efficient in some edge cases
   // const average = arr => arr.reduce((acc, cur) => acc + cur, 0) / arr.length;

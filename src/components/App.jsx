@@ -15,7 +15,7 @@ import Loader from './Loader';
 import ErrorMessage from './ErrorMessage';
 
 function App() {
-  const [query, setQuery] = useState('Avengers');
+  const [query, setQuery] = useState('');
   const [movies, setMovies] = useState([]);
   const [watched, setWatched] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -28,21 +28,18 @@ function App() {
         try {
           setIsLoading(true);
           setError('');
+          
           const response = await fetch(
             `${BASE_URL}?apikey=${API_KEY}&s=${query}`,
           );
-          // console.log(response);
           if (!response.ok)
             throw new Error('Something went wrong with fetching movies');
 
           const data = await response.json();
-
           if (data.Response === 'False') throw new Error(data.Error);
-          // console.log(data);
 
           setMovies(data.Search);
         } catch (err) {
-          // console.error(err.message);
           setError(err.message);
         } finally {
           setIsLoading(false);
@@ -70,12 +67,13 @@ function App() {
   };
 
   const handleAddWatchedMovie = function (movieObj) {
-    // const movieIsAlreadyAdded = watched?.some(
-    //   movie => movie.imdbID === movieObj.imdbID,
-    // );
-    // if (movieIsAlreadyAdded) return;
-
     setWatched(curWatched => [...curWatched, movieObj]);
+  };
+
+  const handleRemoveWatchedMovie = function (movieID) {
+    setWatched(curWatched =>
+      curWatched.filter(movie => movie.imdbID !== movieID),
+    );
   };
 
   return (
@@ -108,7 +106,10 @@ function App() {
           ) : (
             <>
               <WatchedSummary watched={watched} />
-              <WatchedMovieList watched={watched} />
+              <WatchedMovieList
+                watched={watched}
+                onRemoveWatchedMovie={handleRemoveWatchedMovie}
+              />
             </>
           )}
         </Box>

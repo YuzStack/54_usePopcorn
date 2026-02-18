@@ -46,17 +46,14 @@ function MovieDetails({
           const response = await fetch(
             `${BASE_URL}?apikey=${API_KEY}&i=${selectedMovieID}`,
           );
-          // console.log(response);
           if (!response.ok)
             throw new Error('Something went wrong with fetching movie details');
 
           const data = await response.json();
-          // console.log(data);
           if (data.Response === 'False') throw new Error(data.Error);
 
           setMovie(data);
         } catch (err) {
-          // console.error(err.message);
           setError(err.message);
         } finally {
           setIsLoading(false);
