@@ -12,38 +12,48 @@ import NumResults from './NumResults';
 import { API_KEY, BASE_URL } from '../configs';
 
 function App() {
-  const [query, setQuery] = useState('dafadfa');
+  const [query, setQuery] = useState('');
   const [movies, setMovies] = useState([]);
   const [watched, setWatched] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
 
-  useEffect(function () {
-    async function fetchMovies() {
-      try {
-        setIsLoading(true);
-        const response = await fetch(
-          `${BASE_URL}?apikey=${API_KEY}&s=${query}`,
-        );
-        console.log(response);
-        if (!response.ok)
-          throw new Error('Something went wrong with fetching movies');
+  useEffect(
+    function () {
+      async function fetchMovies() {
+        try {
+          setIsLoading(true);
+          setError('');
+          const response = await fetch(
+            `${BASE_URL}?apikey=${API_KEY}&s=${query}`,
+          );
+          console.log(response);
+          if (!response.ok)
+            throw new Error('Something went wrong with fetching movies');
 
-        const data = await response.json();
+          const data = await response.json();
 
-        if (data.Response === 'False') throw new Error(data.Error);
-        console.log(data);
+          if (data.Response === 'False') throw new Error(data.Error);
+          console.log(data);
 
-        setMovies(data.Search);
-      } catch (err) {
-        console.error(err.message);
-        setError(err.message);
-      } finally {
-        setIsLoading(false);
+          setMovies(data.Search);
+        } catch (err) {
+          console.error(err.message);
+          setError(err.message);
+        } finally {
+          setIsLoading(false);
+        }
       }
-    }
-    fetchMovies();
-  }, []);
+      if (!query.trim() || query.length < 3) {
+        setMovies([]);
+        setError('');
+        return;
+      }
+
+      fetchMovies();
+    },
+    [query],
+  );
 
   return (
     <>
