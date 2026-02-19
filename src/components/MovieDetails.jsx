@@ -78,6 +78,18 @@ function MovieDetails({
     [title],
   );
 
+  useEffect(function () {
+    const callback = function (e) {
+      if (e.key === 'Escape') onCloseMovie();
+    };
+
+    document.addEventListener('keydown', callback);
+
+    return function () {
+      document.removeEventListener('keydown', callback);
+    };
+  }, []);
+
   const handleAddMovie = function () {
     const newWatchedMovieObj = {
       imdbID: selectedMovieID,

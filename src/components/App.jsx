@@ -52,6 +52,7 @@ function App() {
       if (!query.trim() || query.length < 3) {
         setMovies([]);
         setError('');
+        handleCloseMovie();
         return;
       }
 
