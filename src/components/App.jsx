@@ -24,13 +24,16 @@ function App() {
 
   useEffect(
     function () {
+      const controller = new AbortController();
+
       async function fetchMovies() {
         try {
           setIsLoading(true);
           setError('');
-          
+
           const response = await fetch(
             `${BASE_URL}?apikey=${API_KEY}&s=${query}`,
+            { signal: controller.signal },
           );
           if (!response.ok)
             throw new Error('Something went wrong with fetching movies');
@@ -40,6 +43,7 @@ function App() {
 
           setMovies(data.Search);
         } catch (err) {
+          if (err.name === 'AbortError') return;
           setError(err.message);
         } finally {
           setIsLoading(false);
@@ -52,6 +56,10 @@ function App() {
       }
 
       fetchMovies();
+
+      return function () {
+        controller.abort();
+      };
     },
     [query],
   );
