@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 // import { tempMovieData, tempWatchedData } from '../data-templates';
-import Nav from './Nav';
+import Header from './Header';
 import Main from './Main';
 import MovieList from './MovieList';
 import WatchedSummary from './WatchedSummary';
@@ -87,11 +87,11 @@ function App() {
 
   return (
     <>
-      <Nav>
+      <Header>
         <Logo />
         <Search query={query} onSetQuery={setQuery} />
         <NumResults movies={movies} />
-      </Nav>
+      </Header>
 
       <Main>
         <Box>
