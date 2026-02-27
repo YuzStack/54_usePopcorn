@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { API_KEY, BASE_URL } from '../configs';
 import Loader from './Loader';
 import ErrorMessage from './ErrorMessage';
@@ -14,6 +14,15 @@ function MovieDetails({
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const [userRating, setUserRating] = useState(0);
+
+  const countRef = useRef(0);
+
+  useEffect(
+    function () {
+      if (userRating) countRef.current++;
+    },
+    [userRating],
+  );
 
   const isWatched = watchedMovies.some(
     movie => movie.imdbID === selectedMovieID,
@@ -102,6 +111,7 @@ function MovieDetails({
       runtime: Number(runtime.split(' ').at(0)),
       imdbRating: Number(imdbRating),
       userRating,
+      countRatingDecisions: countRef.current,
     };
 
     onAddWatchedMovie(newWatchedMovieObj);
