@@ -17,10 +17,22 @@ import ErrorMessage from './ErrorMessage';
 function App() {
   const [query, setQuery] = useState('');
   const [movies, setMovies] = useState([]);
-  const [watched, setWatched] = useState([]);
+
+  const [watched, setWatched] = useState(function () {
+    const storedWatched = localStorage.getItem('watched');
+    return storedWatched ? JSON.parse(storedWatched) : [];
+  });
+
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const [selectedMovieID, setSelectedMovieID] = useState(null);
+
+  useEffect(
+    function () {
+      localStorage.setItem('watched', JSON.stringify(watched));
+    },
+    [watched],
+  );
 
   useEffect(
     function () {

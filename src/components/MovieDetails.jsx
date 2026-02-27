@@ -78,17 +78,20 @@ function MovieDetails({
     [title],
   );
 
-  useEffect(function () {
-    const callback = function (e) {
-      if (e.key === 'Escape') onCloseMovie();
-    };
+  useEffect(
+    function () {
+      const callback = function (e) {
+        if (e.key === 'Escape') onCloseMovie();
+      };
 
-    document.addEventListener('keydown', callback);
+      document.addEventListener('keydown', callback);
 
-    return function () {
-      document.removeEventListener('keydown', callback);
-    };
-  }, []);
+      return function () {
+        document.removeEventListener('keydown', callback);
+      };
+    },
+    [onCloseMovie],
+  );
 
   const handleAddMovie = function () {
     const newWatchedMovieObj = {
