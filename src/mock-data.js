@@ -45,4 +45,4 @@ const tempWatchedData = [
   },
 ];
 
-export { tempMovieData, tempWatchedData };
+export default { tempMovieData, tempWatchedData };

@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-// import { tempMovieData, tempWatchedData } from '../data-templates';
 import Header from './Header';
 import Main from './Main';
 import MovieList from './MovieList';
@@ -9,72 +8,27 @@ import Box from './Box';
 import Logo from './Logo';
 import Search from './Search';
 import NumResults from './NumResults';
-import { API_KEY, BASE_URL } from '../configs';
 import MovieDetails from './MovieDetails';
 import Loader from './Loader';
 import ErrorMessage from './ErrorMessage';
+import useMovies from '../useMovies';
 
 function App() {
   const [query, setQuery] = useState('');
-  const [movies, setMovies] = useState([]);
+  const [selectedMovieID, setSelectedMovieID] = useState(null);
 
   const [watched, setWatched] = useState(function () {
     const storedWatched = localStorage.getItem('watched');
     return storedWatched ? JSON.parse(storedWatched) : [];
   });
 
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('');
-  const [selectedMovieID, setSelectedMovieID] = useState(null);
+  const { movies, isLoading, error } = useMovies(query);
 
   useEffect(
     function () {
       localStorage.setItem('watched', JSON.stringify(watched));
     },
     [watched],
-  );
-
-  useEffect(
-    function () {
-      const controller = new AbortController();
-
-      async function fetchMovies() {
-        try {
-          setIsLoading(true);
-          setError('');
-
-          const response = await fetch(
-            `${BASE_URL}?apikey=${API_KEY}&s=${query}`,
-            { signal: controller.signal },
-          );
-          if (!response.ok)
-            throw new Error('Something went wrong with fetching movies');
-
-          const data = await response.json();
-          if (data.Response === 'False') throw new Error(data.Error);
-
-          setMovies(data.Search);
-        } catch (err) {
-          if (err.name === 'AbortError') return;
-          setError(err.message);
-        } finally {
-          setIsLoading(false);
-        }
-      }
-      if (!query.trim() || query.length < 3) {
-        setMovies([]);
-        setError('');
-        handleCloseMovie();
-        return;
-      }
-
-      fetchMovies();
-
-      return function () {
-        controller.abort();
-      };
-    },
-    [query],
   );
 
   const handleSelectMovie = function (movieID) {
