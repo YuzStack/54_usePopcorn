@@ -3,6 +3,7 @@ import { API_KEY, BASE_URL } from '../configs';
 import Loader from './Loader';
 import ErrorMessage from './ErrorMessage';
 import StarRating from './StarRating';
+import useKey from '../hooks/useKey';
 
 function MovieDetails({
   selectedMovieID,
@@ -87,20 +88,7 @@ function MovieDetails({
     [title],
   );
 
-  useEffect(
-    function () {
-      const callback = function (e) {
-        if (e.key === 'Escape') onCloseMovie();
-      };
-
-      document.addEventListener('keydown', callback);
-
-      return function () {
-        document.removeEventListener('keydown', callback);
-      };
-    },
-    [onCloseMovie],
-  );
+  useKey('Escape', onCloseMovie);
 
   const handleAddMovie = function () {
     const newWatchedMovieObj = {

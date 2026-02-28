@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { API_KEY, BASE_URL } from './configs';
+import { API_KEY, BASE_URL } from '../configs';
 
 function useMovies(query) {
   const [movies, setMovies] = useState([]);
@@ -37,8 +37,6 @@ function useMovies(query) {
         setMovies([]);
         setError('');
 
-        //  handleCloseMovie();
-        // callback?.();
         return;
       }
 

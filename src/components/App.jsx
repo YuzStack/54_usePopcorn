@@ -11,8 +11,8 @@ import NumResults from './NumResults';
 import MovieDetails from './MovieDetails';
 import Loader from './Loader';
 import ErrorMessage from './ErrorMessage';
-import useMovies from '../useMovies';
-import useLocalStorage from '../useLocalStorage';
+import useMovies from '../hooks/useMovies';
+import useLocalStorage from '../hooks/useLocalStorage';
 
 function App() {
   const [query, setQuery] = useState('');
