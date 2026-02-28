@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Header from './Header';
 import Main from './Main';
 import MovieList from './MovieList';
@@ -12,24 +12,14 @@ import MovieDetails from './MovieDetails';
 import Loader from './Loader';
 import ErrorMessage from './ErrorMessage';
 import useMovies from '../useMovies';
+import useLocalStorage from '../useLocalStorage';
 
 function App() {
   const [query, setQuery] = useState('');
   const [selectedMovieID, setSelectedMovieID] = useState(null);
 
-  const [watched, setWatched] = useState(function () {
-    const storedWatched = localStorage.getItem('watched');
-    return storedWatched ? JSON.parse(storedWatched) : [];
-  });
-
   const { movies, isLoading, error } = useMovies(query);
-
-  useEffect(
-    function () {
-      localStorage.setItem('watched', JSON.stringify(watched));
-    },
-    [watched],
-  );
+  const [watched, setWatched] = useLocalStorage([], 'watched');
 
   const handleSelectMovie = function (movieID) {
     setSelectedMovieID(curSelectedMovieID =>
